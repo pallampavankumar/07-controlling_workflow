@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -19,6 +20,7 @@ jobs:
         run: npm ci
       - name: Lint code
         run: npm run lint
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -40,6 +42,7 @@ jobs:
         with:
           name: test-report
           path: test.json
+
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -62,6 +65,7 @@ jobs:
         with:
           name: dist-files
           path: dist
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -74,12 +78,13 @@ jobs:
         run: ls
       - name: Deploy
         run: echo "Deploying..."
+
   report:
-    needs: [lint,deploy]
+    needs: [lint, deploy]
     if: failure()
     runs-on: ubuntu-latest
     steps:
-      -name: Output information
-      run: |
-         echo "Something went wrong"
-         echo " $ {{ toJSON(github)}}"
+      - name: Output information
+        run: |
+          echo "Something went wrong"
+          echo "${{ toJSON(github) }}"
